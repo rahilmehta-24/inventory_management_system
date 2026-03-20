@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  inventory-app:
+    build: .
+    container_name: inventory_system
+    ports:
+      - "5002:5001"
+    volumes:
+      - ./server/inventory.db:/app/server/inventory.db
+      - ./server/uploads:/app/server/uploads
+    restart: unless-stopped

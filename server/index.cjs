@@ -295,6 +295,19 @@ app.post('/api/invoices/upload', upload.single('invoice'), (req, res) => {
   res.json({ url: fileUrl });
 });
 
+// --- Serve React Frontend ---
+const distPath = path.join(__dirname, '../dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      res.sendFile(path.join(distPath, 'index.html'));
+    } else {
+      next();
+    }
+  });
+}
+
 // --- Health Check ---
 app.get('/api/health', (req, res) => {
   db.get('SELECT 1', [], (err) => {
